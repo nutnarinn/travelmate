@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Disclosure, DisclosureButton } from "@headlessui/react";
 import {
   AiOutlineMenu,
@@ -10,16 +11,32 @@ import { IoNotifications } from "react-icons/io5";
 import { FiMoreHorizontal, FiLogOut } from "react-icons/fi";
 
 export default function SideNavbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleNavbar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div>
       <Disclosure as="nav">
-        <DisclosureButton className="absolute top-4 right-4 inline-flex items-center peer justify-center rounded-md p-2 text-gray-900 hover:text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:rind-white group">
+        {/* Menu button */}
+        <DisclosureButton
+          className="absolute top-4 right-4 inline-flex items-center peer justify-center rounded-md p-2 text-gray-900 hover:text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:rind-white group"
+          onClick={toggleNavbar}
+          aria-hidden={!isOpen}
+        >
           <AiOutlineMenu
             className="block md:hidden h-6 w-6"
             aria-hidden="true"
           />
         </DisclosureButton>
-        <div className="p-6 w-1/2 h-screen bg-white z-20 fixed top-0 -left-96 lg:w-60 lg:left-0 peer-focus:left-0 peer:transition ease-out delay-150 duration-200">
+        {/* Sidebar */}
+        <div
+          className={`p-6 w-1/2 h-screen bg-white z-20 fixed top-0 ${
+            isOpen ? "left-0" : "-left-96"
+          } lg:w-60 lg:left-0 transition-all ease-out delay-150 duration-500`}
+          aria-hidden={!isOpen}
+        >
           <div className="flex flex-col justify-start items-center">
             <h1 className="text-base text-center cursor-pointer font-bold text-blue-900 border-gray-100 pb-4 w-full">
               TravelMate
@@ -89,7 +106,6 @@ export default function SideNavbar() {
                 </h3>
               </div>
             </div>
-
           </div>
         </div>
       </Disclosure>
