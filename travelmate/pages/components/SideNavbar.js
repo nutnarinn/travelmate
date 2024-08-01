@@ -11,10 +11,17 @@ import { FaUserFriends, FaSearch } from "react-icons/fa";
 import { IoNotifications } from "react-icons/io5";
 import { FiLogOut } from "react-icons/fi";
 import { BiSolidUserCircle } from "react-icons/bi";
+import Modal from "./Modal";
+import LoginForm from "./LoginForm";
+import SignUpForm from "./SignUpForm";
 
 export default function SideNavbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
+  
   const { data: session, status } = useSession();
+  console.log('useSession', session);
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
@@ -121,7 +128,7 @@ export default function SideNavbar() {
               <div className="my-4 w-full text-center">
                 <div
                   className="flex mb-2 justify-center items-center gap-3 border bg-gray-900 hover:border-gray-200 hover:bg-gray-800 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto mt-2"
-                  onClick={() => signIn()}
+                  onClick={() => setShowLogin(true)}
                 >
                   <FiLogOut className="text-2xl text-white " />
                   <h3 className="text-base text-white group-hover:text-white font-semibold">
@@ -130,14 +137,21 @@ export default function SideNavbar() {
                 </div>
                 <div
                   className="flex mb-2 justify-center items-center gap-3 border border-gray-200 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto"
-                  onClick={() => signIn("signup")}
+                  onClick={() => setShowSignUp(true)}
                 >
                   <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                    Create an account
+                    Create account
                   </h3>
                 </div>
               </div>
             )}
+            {/* Modals */}
+            <Modal show={showLogin} onClose={() => setShowLogin(false)}>
+              <LoginForm />
+            </Modal>
+            <Modal show={showSignUp} onClose={() => setShowSignUp(false)}>
+              <SignUpForm />
+            </Modal>
           </div>
         </div>
       </Disclosure>
