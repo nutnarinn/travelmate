@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "posts",
+  "info": {
+    "singularName": "post",
+    "pluralName": "posts",
+    "displayName": "Post",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 150
+    },
+    "location": {
+      "type": "customField",
+      "required": true,
+      "customField": "plugin::google-maps.location-picker"
+    },
+    "date": {
+      "type": "datetime",
+      "required": true
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "posts"
+    },
+    "tag": {
+      "type": "customField",
+      "customField": "plugin::tagsinput.tags"
+    },
+    "participantNum": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "participants": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "joined_posts"
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 1000
+    }
+  }
+}
