@@ -1,160 +1,107 @@
-import { useState } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
-import { Disclosure, DisclosureButton } from "@headlessui/react";
+import React from "react";
+import { HiSearch, HiBell, HiMail, HiQuestionMarkCircle } from "react-icons/hi";
 import {
-  AiOutlineMenu,
-  AiFillHome,
-  AiFillSetting,
-  AiFillMessage,
-} from "react-icons/ai";
-import { FaUserFriends, FaSearch } from "react-icons/fa";
-import { IoNotifications } from "react-icons/io5";
-import { FiLogOut } from "react-icons/fi";
-import { BiSolidUserCircle } from "react-icons/bi";
-import Modal from "./Modal";
-import LoginForm from "./LoginForm";
-import SignUpForm from "./SignUpForm";
+  HiHome,
+  HiCalendarDays,
+  HiUserCircle,
+  HiCog6Tooth,
+} from "react-icons/hi2";
+import Image from "next/image";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function SideNavbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
-  
-  const { data: session, status } = useSession();
-  console.log('useSession', session);
-
-  const toggleNavbar = () => {
-    setIsOpen(!isOpen);
-  };
+  const { data: session } = useSession();
 
   return (
-    <div>
-      <Disclosure as="nav">
-        {/* Menu button */}
-        <DisclosureButton
-          className="absolute top-4 right-4 inline-flex items-center peer justify-center rounded-md p-2 text-gray-900 hover:text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white group"
-          onClick={toggleNavbar}
-          aria-hidden={!isOpen}
-        >
-          <AiOutlineMenu
-            className="block md:hidden h-6 w-6"
-            aria-hidden="true"
-          />
-        </DisclosureButton>
-        {/* Sidebar */}
-        <div
-          className={`p-6 w-1/2 h-screen bg-white z-20 fixed top-0 ${
-            isOpen ? "left-0" : "-left-96"
-          } lg:w-60 lg:left-0 transition-all ease-out delay-150 duration-500`}
-          aria-hidden={!isOpen}
-        >
-          <div className="flex flex-col justify-start items-center">
-            <h1 className="text-base text-center cursor-pointer font-bold text-blue-900 border-gray-100 pb-4 w-full">
+    <div className="fixed inset-y-0 left-0 w-60 bg-white shadow-md flex flex-col justify-between">
+      {/* Logo and Navigation */}
+      <div className="p-6 flex flex-col justify-between h-full">
+        <div>
+          <div className="flex items-center mb-8">
+            <Image
+              src="/travelmate_logo.svg"
+              alt="Logo"
+              width={32}
+              height={32}
+            />
+            <h1 className="text-2xl font-bold text-[#54BEC1] ml-4">
               TravelMate
             </h1>
+          </div>
 
-            {/* Menu section */}
-            <div className="my-4 border-b border-gray-100 pb-4 w-full">
-              <div className="flex mb-2 justify-start items-center gap-5 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
-                <AiFillHome className="text-2xl text-gray-600 group-hover:text-white " />
-                <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                  Home
-                </h3>
-              </div>
+          {/* Section 1: Main Navigation */}
+          <div className="space-y-4 mb-8">
+            <Link
+              href="/"
+              className="flex items-center text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg"
+            >
+              <HiHome className="w-6 h-6 mr-3" />
+              Home
+            </Link>
 
-              <div className="flex mb-2 justify-start items-center gap-5 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
-                <FaSearch className="text-2xl text-gray-600 group-hover:text-white " />
-                <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                  Search
-                </h3>
-              </div>
+            <Link
+              href="/search"
+              className="flex items-center text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg"
+            >
+              <HiSearch className="w-6 h-6 mr-3" />
+              Search
+            </Link>
 
-              {/* Conditional rendering for authorized users */}
-              {session && (
-                <>
-                  <div className="flex mb-2 justify-start items-center gap-5 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
-                    <IoNotifications className="text-2xl text-gray-600 group-hover:text-white " />
-                    <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                      Notifications
-                    </h3>
-                  </div>
+            {session && (
+              <>
+              <Link
+              href="/calendar"
+              className="flex items-center text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg"
+            >
+              <HiCalendarDays className="w-6 h-6 mr-3" />
+              Calendar
+            </Link>
 
-                  <div className="flex mb-2 justify-start items-center gap-5 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
-                    <FaUserFriends className="text-2xl text-gray-600 group-hover:text-white " />
-                    <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                      Friends
-                    </h3>
-                  </div>
+            <Link
+              href="/notifications"
+              className="flex items-center text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg"
+            >
+              <HiBell className="w-6 h-6 mr-3" />
+              Notifications
+            </Link>
 
-                  <div className="flex mb-2 justify-start items-center gap-5 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
-                    <AiFillMessage className="text-2xl text-gray-600 group-hover:text-white " />
-                    <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                      Messages
-                    </h3>
-                  </div>
-
-                  <div className="flex mb-2 justify-start items-center gap-5 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
-                    <BiSolidUserCircle className="text-2xl text-gray-600 group-hover:text-white " />
-                    <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                      Profile
-                    </h3>
-                  </div>
-
-                  <div className="flex mb-2 justify-start items-center gap-5 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
-                    <AiFillSetting className="text-2xl text-gray-600 group-hover:text-white " />
-                    <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                      Setting
-                    </h3>
-                  </div>
-                </>
-              )}
-            </div>
-
-            {session ? (
-              // For authorized users
-              <div className="my-4 w-full">
-                <div
-                  className="flex mb-2 justify-center items-center gap-3 border border-gray-200 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto"
-                  onClick={() => signOut()}
-                >
-                  <FiLogOut className="text-2xl text-gray-600 group-hover:text-white " />
-                  <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                    Sign out
-                  </h3>
-                </div>
-              </div>
-            ) : (
-              // For unauthorized users
-              <div className="my-4 w-full text-center">
-                <div
-                  className="flex mb-2 justify-center items-center gap-3 border bg-gray-900 hover:border-gray-200 hover:bg-gray-800 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto mt-2"
-                  onClick={() => setShowLogin(true)}
-                >
-                  <FiLogOut className="text-2xl text-white " />
-                  <h3 className="text-base text-white group-hover:text-white font-semibold">
-                    Log in
-                  </h3>
-                </div>
-                <div
-                  className="flex mb-2 justify-center items-center gap-3 border border-gray-200 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto"
-                  onClick={() => setShowSignUp(true)}
-                >
-                  <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                    Create account
-                  </h3>
-                </div>
-              </div>
+            <Link
+              href="/messages"
+              className="flex items-center text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg"
+            >
+              <HiMail className="w-6 h-6 mr-3" />
+              Messages
+            </Link>
+            </>
             )}
-            {/* Modals */}
-            <Modal show={showLogin} onClose={() => setShowLogin(false)}>
-              <LoginForm />
-            </Modal>
-            <Modal show={showSignUp} onClose={() => setShowSignUp(false)}>
-              <SignUpForm />
-            </Modal>
+
+            
           </div>
         </div>
-      </Disclosure>
+
+        {/* Section 2: Settings and Help Support at the bottom */}
+        <div>
+          <div className="border-t border-gray-200 my-6"></div>
+          <div className="space-y-4">
+            <Link
+              href="/settings"
+              className="flex items-center text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg"
+            >
+              <HiCog6Tooth className="w-6 h-6 mr-3" />
+              Settings
+            </Link>
+
+            <Link
+              href="/help"
+              className="flex items-center text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg"
+            >
+              <HiQuestionMarkCircle className="w-6 h-6 mr-3" />
+              Help & Support
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
