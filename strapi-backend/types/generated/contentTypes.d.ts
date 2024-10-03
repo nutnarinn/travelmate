@@ -382,10 +382,9 @@ export interface ApiPostPost extends Schema.CollectionType {
     location: Attribute.JSON &
       Attribute.Required &
       Attribute.CustomField<'plugin::google-maps.location-picker'>;
-    date: Attribute.DateTime & Attribute.Required;
-    author: Attribute.Relation<
+    authors: Attribute.Relation<
       'api::post.post',
-      'manyToOne',
+      'oneToMany',
       'plugin::users-permissions.user'
     >;
     tag: Attribute.JSON & Attribute.CustomField<'plugin::tagsinput.tags'>;
@@ -406,6 +405,9 @@ export interface ApiPostPost extends Schema.CollectionType {
       Attribute.SetMinMaxLength<{
         maxLength: 1000;
       }>;
+    date: Attribute.Date & Attribute.Required;
+    authorFreeTime: Attribute.JSON & Attribute.Required;
+    participantFreeTimes: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -869,14 +871,14 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         maxLength: 200;
       }>;
     profilePicture: Attribute.Media<'images'>;
-    posts: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::post.post'
-    >;
     joined_posts: Attribute.Relation<
       'plugin::users-permissions.user',
       'manyToMany',
+      'api::post.post'
+    >;
+    post: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToOne',
       'api::post.post'
     >;
     createdAt: Attribute.DateTime;

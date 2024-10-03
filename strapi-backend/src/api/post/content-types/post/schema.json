@@ -22,15 +22,11 @@
       "required": true,
       "customField": "plugin::google-maps.location-picker"
     },
-    "date": {
-      "type": "datetime",
-      "required": true
-    },
-    "author": {
+    "authors": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "oneToMany",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "posts"
+      "mappedBy": "post"
     },
     "tag": {
       "type": "customField",
@@ -50,6 +46,17 @@
     "description": {
       "type": "text",
       "maxLength": 1000
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "authorFreeTime": {
+      "type": "json",
+      "required": true
+    },
+    "participantFreeTimes": {
+      "type": "json"
     }
   }
 }

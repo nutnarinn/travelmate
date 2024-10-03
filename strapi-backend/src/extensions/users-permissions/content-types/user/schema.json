@@ -76,17 +76,17 @@
       "type": "media",
       "multiple": false
     },
-    "posts": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::post.post",
-      "mappedBy": "author"
-    },
     "joined_posts": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::post.post",
       "mappedBy": "participants"
+    },
+    "post": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::post.post",
+      "inversedBy": "authors"
     }
   }
 }
