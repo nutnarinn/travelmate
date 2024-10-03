@@ -71,6 +71,8 @@ export default function Home({ posts, users }) {
                   participantNum={post.attributes.participantNum}
                   participants={post.attributes.participants?.data || []}
                   users={users}
+                  authorFreeTimes={post.attributes.authorFreeTime || []}
+                  participantsFreeTimes={post.attributes.participantFreeTimes || []}
                 />
               ))
             ) : (

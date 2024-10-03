@@ -84,12 +84,13 @@ const FreeTimeScheduler = ({
   });
 
   // Find and add best overlaps
-  const bestOverlaps = findBestMatches(
+  const { overlapIntervals } = findBestMatches(
     authorFreeTimes,
     participantsFreeTimes.map((pt) => pt.freeTimes)
   );
-  if (bestOverlaps) {
-    bestOverlaps.forEach((overlap, index) => {
+  
+  if (overlapIntervals && overlapIntervals.length > 0) {
+    overlapIntervals.forEach((overlap, index) => {
       items.push({
         id: `best-overlap-${index}`,
         group: participants.length + 2,
@@ -137,9 +138,9 @@ const FreeTimeScheduler = ({
         {/* Show bestOverlaps */}
         <div className="mt-4">
           <h1 className="text-2xl font-semibold mb-4">Best Overlap Times</h1>
-          {bestOverlaps && bestOverlaps.length > 0 ? (
+          {overlapIntervals && overlapIntervals.length > 0 ? (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {bestOverlaps.map((overlap, index) => (
+              {overlapIntervals.map((overlap, index) => (
                 <div
                   key={index}
                   className="p-6 bg-white border rounded-lg hover:shadow-md transition-shadow duration-300"

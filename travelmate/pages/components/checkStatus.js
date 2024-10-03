@@ -1,31 +1,59 @@
+import axios from "axios";
 import { findBestMatches } from "./findBestMatches";
 
-export function checkStatus(authorFreeTimes, participantsFreeTimes) {
+export async function checkStatus(postId) {
+  try {
+    // Fetch post data based on postId
+    const { data: postData } = await axios.get(
+      `http://localhost:1337/api/posts/${postId}?populate=*`
+    );
 
-  // If either the author or participants haven't provided free times
-  if (authorFreeTimes.length === 0 || participantsFreeTimes.length === 0) {
-    return 'Pending';
+    const post = postData?.data || null;
+    if (!post) return "Pending";
+
+    const authorFreeTimes = post.attributes.authorFreeTime || [];
+    const participantsFreeTimes = post.attributes.participantFreeTimes || [];
+
+    // If either the author or participants haven't provided free times
+    if (authorFreeTimes.length === 0 || participantsFreeTimes.length === 0) {
+      return "Pending";
+    }
+
+    // Find best matches between author and participants
+    const { overlapIntervals } = findBestMatches(
+      authorFreeTimes,
+      participantsFreeTimes.map((p) => p.freeTimes)
+    );
+
+    // If no best matches found
+    if (!overlapIntervals || overlapIntervals.length === 0) {
+      return "No Match";
+    }
+
+    // Check if all participants matched
+    let matchCount = 0;
+    participantsFreeTimes.forEach((participantTimes) => {
+      const { overlapIntervals: participantMatches } = findBestMatches(authorFreeTimes, [participantTimes.freeTimes]);
+      if (participantMatches && participantMatches.length > 0) {
+        matchCount++;
+      }
+    });
+
+    // If all participants matched
+    if (matchCount === participantsFreeTimes.length) {
+      return "Complete";
+    }
+
+    // If some participants matched
+    if (matchCount > 0 && matchCount < participantsFreeTimes.length) {
+      return "Partial Match";
+    }
+
+    // If no participants matched
+    return "No Match";
+
+  } catch (error) {
+    console.error("Error fetching post data:", error);
+    return "Pending"; // Default to Pending
   }
-
-  // Find best matches between author and participants
-  const bestMatches = findBestMatches(authorFreeTimes, participantsFreeTimes);
-
-  // If no best matches found
-  if (!bestMatches || bestMatches.length === 0) {
-    return 'No Match';
-  }
-
-  // Check if all participants have a best match
-  const allParticipantsMatch = participantsFreeTimes.every((participantTimes) => {
-    const matches = findBestMatches(authorFreeTimes, [participantTimes]);
-    return matches && matches.length > 0;
-  });
-
-  // If all participants match
-  if (allParticipantsMatch) {
-    return 'Complete';
-  }
-
-  // If some but not all participants match
-  return 'Partial Match';
 }

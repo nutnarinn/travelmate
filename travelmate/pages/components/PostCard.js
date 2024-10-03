@@ -23,11 +23,12 @@ export default function PostCard({
   const [status, setStatus] = useState("Pending");
 
   useEffect(() => {
-    const calculatedStatus = checkStatus(
-      authorFreeTimes,
-      participantsFreeTimes
-    );
-    setStatus(calculatedStatus);
+    const fetchStatus = async () => {
+      const calculatedStatus = await checkStatus(id);
+      setStatus(calculatedStatus);
+    };
+
+    fetchStatus();
 
     const getPlaceDetails = async () => {
       if (location?.coordinates) {
@@ -61,7 +62,7 @@ export default function PostCard({
     };
 
     getPlaceDetails();
-  }, [authorFreeTimes, participantsFreeTimes, location?.coordinates]);
+  }, [id, location?.coordinates]);
 
   const handleStarClick = () => {
     setIsStarred(!isStarred);
@@ -242,9 +243,7 @@ export default function PostCard({
               {participants.length > 1 && (
                 <>
                   and{" "}
-                  <span
-                    className="relative group cursor-pointer font-semibold text-[#54BEC1]"
-                  >
+                  <span className="relative group cursor-pointer font-semibold text-[#54BEC1]">
                     {participants.length - 1}{" "}
                     {participants.length - 1 === 1 ? "other" : "others"}
                     {/* Tooltip for the other participants */}
