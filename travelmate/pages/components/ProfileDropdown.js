@@ -4,7 +4,7 @@ import { HiUserCircle } from "react-icons/hi2";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 
-export default function ProfileDropdown({ session }) {
+export default function ProfileDropdown({ session, profilePicture }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -19,9 +19,9 @@ export default function ProfileDropdown({ session }) {
             className="cursor-pointer flex items-center space-x-2 hover:bg-gray-100 px-2 py-2 rounded-full"
             onClick={toggleDropdown}
           >
-            {session.user.image ? (
+            {profilePicture ? (
               <img
-                src={session.user.image}
+                src={profilePicture} // Use profilePicture instead of session.user.image
                 alt="Profile"
                 className="w-8 h-8 rounded-full"
               />
@@ -39,9 +39,9 @@ export default function ProfileDropdown({ session }) {
           <ul className="py-2">
             {/* Section 1: User Account */}
             <li className="px-4 py-2 flex items-center">
-              {session.user.image ? (
+            {profilePicture ? (
                 <img
-                  src={session.user.image}
+                  src={profilePicture} // Use profilePicture for dropdown avatar
                   alt="Profile"
                   className="w-10 h-10 rounded-full"
                 />
